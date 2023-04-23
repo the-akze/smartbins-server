@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="section">
+        <div class="banner">
+            <h1 class="banner-title">{{product_name}}</h1>
+        </div>
+    </div>
+    <hr/>
+    <div class="section">
+        <h2 class="section-title center-text">
+            {{product_name}}
+        </h2>
+        <script>
+            location = "/dashboard";
+        </script>
+    </div>
+{% endblock %}

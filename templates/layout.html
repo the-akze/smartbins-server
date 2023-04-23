@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{product_name}} • {{page_title}}</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans">
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-bar-left">
+            <a href="/" class="nav-bar-title">
+                <h1 class="nav-bar-title-text">
+                    {{product_name}}
+                </h1>
+            </a>
+        </div>
+        <div class="nav-bar-right">
+            <div class="nav-bar-right-links">
+                {% for link in [
+                    ["Home", "/"],
+                    ["Dashboard", "/dashboard"] 
+                ] %}
+                    <a class="nav-bar-right-link" href="{{link[1]}}">
+                        <p class="nav-bar-right-link-label">
+                            {{link[0]}}
+                        </p>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="page-top-gap"></div>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

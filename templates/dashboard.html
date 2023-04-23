@@ -1,0 +1,98 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="section">
+    <h1 class="dashboard-summary center-text">
+        DASHBOARD
+    </h1>
+</div>
+<p class="center-text">REALTIME</p>
+<div class="section current-amounts-section">
+    <div class="current-amounts-side current-amounts-left">
+        <p class="tiny">GARBAGE</p>
+        <h2 class="realtime-updating" id="realtime-garbage-weight">...</h2>
+        <p>KG</p>
+    </div>
+    <div class="current-amounts-side current-amounts-right">
+        <p class="tiny">RECYCLE</p>
+        <h2 class="realtime-updating" id="realtime-recycle-weight">...</h2>
+        <p>KG</p>
+    </div>
+</div>
+<script>
+    var realtimeGarbageText = document.querySelector("#realtime-garbage-weight");
+    var realtimeRecycleText = document.querySelector("#realtime-recycle-weight");
+
+    async function updateRealtimeVars() {
+        var hosturl = "";
+        var path = "/get_realtime_weight_data"
+        var response = await fetch(hosturl + path);
+        console.log("response", response);
+        var jsonData = await response.json();
+        console.log("jsonData", jsonData);
+        realtimeRecycleText.innerText = jsonData.recycleWeight;
+        realtimeGarbageText.innerText = jsonData.garbageWeight;
+        console.log("updated realtime text")
+    }
+
+    setInterval(updateRealtimeVars, 2000);
+</script>
+<hr />
+<div class="section">
+    <h2 class="section-title center-text">
+        How much trash are you throwing?
+    </h2>
+    <h2 class="section-description center-text">
+        In the past <u>24</u> hours, you threw away <u>{{sortData["countR"]}}</u> pieces of recyclable material, and
+        <u>{{sortData["countG"]}}</u> pieces of garbage.
+    </h2>
+    <div class="section">
+        <div class="graph-section">
+            <!-- <div class="graph-section-left">
+                    <img class="graph-section-left-img" src="https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"/>
+                </div> -->
+            <div class="graph-section-right">
+                <h3 class="graph-title">
+                    <span style="
+                        text-decoration: underline;
+                        text-decoration-color: rgb(080, 110, 200)">Garbage</span>
+
+                    and
+
+                    <span style="
+                        text-decoration: underline;
+                        text-decoration-color: rgb(100, 200, 100)">Recycling</span>
+                </h3>
+                <div class="horizontal-centerer">
+                    <div class="graph-container">
+                        {% for plot in weightData %}
+                        <div class="graph-plot-section">
+                            <div class="graph-bar graph-bar-r" style="height: 200px;">
+                                <h2>{{plot["recycleWeight"]}}</h2>
+                                <p>KG</p>
+                            </div>
+                            <div class="graph-bar graph-bar-g" style="height: 200px;">
+                                <h2>{{plot["garbageWeight"]}}</h2>
+                                <p>KG</p>
+                            </div>
+                            <p class="graph-bar-time center-text">{{plot["time"]}}</p>
+                        </div>
+                        {% endfor %}
+                        <script>
+                            document.querySelectorAll(".graph-bar").forEach(element => {
+                                element.style.height = (100 * parseFloat(element.querySelector("h2").innerText))
+                                    .toString() + "px";
+                            });
+                            document.querySelectorAll(".graph-bar-time").forEach(element => {
+                                var d = new Date(parseFloat(element.innerText));
+                                element.innerText = d.toDateString().substring(4, 10)
+                            })
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.min.js"></script>
+{% endblock %}
